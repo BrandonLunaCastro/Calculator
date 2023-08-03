@@ -3,10 +3,10 @@ const suma = (n1,n2) => n1 + n2;
 
 const resta = (n1,n2) => n1 - n2; 
 
-const multiplicacion = (n1,n2) =>  n1 * n2 ; 
+const multiplicacion = (n1,n2) =>  n1 * n2; 
 
 const division = (n1,n2) => n1 / n2;
-
+/* Segun el operando que se recibe esta funcion maneja que operacion aritmetica se ejecuta */
 const operate  = (operate,n1,n2) => {
     let result
     
@@ -21,53 +21,76 @@ const operate  = (operate,n1,n2) => {
         result = multiplicacion(n1,n2)
             break;
         case '/' : 
-        result = division(n1,n2)
+            n2 === 0 ? result= 'no se puede dividir por 0' : result = division(n1,n2)
             break;
         default:
-        result = 'ingrese un operando valido'
+        result = 'Math Error'
             break;
     }   
     return result
 }
 
-//funciones para mostrar los numeros en el display
+
 let btns = document.querySelectorAll("button"),
     input = document.querySelector(".input"),
     output = document.querySelector(".output")
-    
     console.log(input.innerText) 
+
 let num1,
     operando,
     num2
+/* Funcion que recibe los valores que pasara a la funcion operate , esta a su vez
+actualiza el display de la calculadora */
 const pintarDisplay = (valor) =>{ 
-   
-    if(input.innerText === "0" && !(valor === "clear")){
+    
+    if(input.innerText === "0" && !(valor === "clear") && !(valor==='=')){
         input.innerText = valor
         num1 = valor
-        num2 = ""
     }else if(valor === "clear"){
         input.innerText = "0"
         output.innerText = " "
         num1 = "0"
         operando = ""
-        num2 = "0"
+        num2 = ""
     }else if(valor === "="){
-        input.innerText += " "
-        output.innerText = operate(operando,Number(num1),Number(num2))
-    }else if(valor === "+" || valor === "-" || valor === "*" || valor === "/" ){
+        input.innerText += ""
+        output.innerText = operate(operando,Number(num1),Number(num2));
+        num1 = operate(operando,Number(num1),Number(num2));
+        num2 = ''
+        operando = ""
+    }else if((valor === "+" || valor === "-" || valor === "*" || valor === "/") && !operando ){
         input.innerText += valor
         operando = valor
-    }else if(!operando){
+    }else if(!operando && !(valor == "undo")){
         input.innerText += valor
-        num1 += valor 
+        num1 += valor
+     
+    }else if(operando && (valor === "+" || valor === "-" || valor === "*" || valor === "/" )){
+        num1 = operate(operando,Number(num1),Number(num2)) 
+        output.innerText = num1
+        operando = valor
+        input.innerText += valor
+        num2 = '' 
+    /* Esta condicion analiza si ya existe un operando cargado en la variable y si el nuevo valor que se ingresa es otro operando, 
+       entonces realiza la operacion con los numeros dispuestos por el usuario y carga el nuevo operando mostrando en pantalla el
+       resultado
+    */   
+    }else if(valor === 'undo'){
+        let longitud = input.innerText; 
+        if(longitud.length === 1){
+            input.innerText = 0
+        }else{
+            input.innerText = longitud.slice(0,longitud.length-1);  
+            
+        } 
     }else{
-          input.innerText += valor
-          num2 += valor
-    }   
+        num2 === undefined ? num2 = valor : num2 += valor
+        input.innerText += valor
+      //output.innerText =  operate(operando,Number(num1),Number(num2)) 
+    }
     
-   /*    
-    */
-       console.log(num1,operando,num2)
+    console.log(num1,operando,num2)
+        
 }
 
 btns.forEach(btn => {
