@@ -10,7 +10,22 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
+main{
+    display: inherit;
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+}
+footer{
+    display: inherit;
+    align-items: center;
+    height: 50px;
+    gap: 13px;
+    
+}
+
 #calculator{
     background-color: rgb(55, 50, 50);
     border-radius: 10px;
